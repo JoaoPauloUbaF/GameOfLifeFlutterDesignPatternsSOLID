@@ -27,7 +27,7 @@ class _GameOfLifeState extends State<GameOfLife> {
 
   Timer? timer;
 
-  Widget _someSpace = const SizedBox(
+  final Widget _someSpace = const SizedBox(
     height: 20,
   );
 
@@ -55,40 +55,30 @@ class _GameOfLifeState extends State<GameOfLife> {
       appBar: AppBar(
         title: Text('Generation: $_generation'),
       ),
-      body: SizedBox(
-        height: MediaQuery.of(context).size.height,
-        child: ListView(
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
           children: [
-            Center(
-              child: Column(
-                children: [
-                  _someSpace,
-                  const Text('Enter the dimension'),
-                  Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: TextField(
-                      decoration: const InputDecoration(
-                        hintText: ' Example: 4 will create a 4x4 grid',
-                      ),
-                      keyboardType: TextInputType.number,
-                      onSubmitted: (value) {
-                        setState(() {
-                          _generation = 0;
-                          grid.rows = int.parse(value);
-                          grid.columns = int.parse(value);
-                          grid.initGrid();
-                        });
-                      },
-                    ),
-                  ),
-                ],
+            const Text('Enter the dimension'),
+            TextField(
+              decoration: const InputDecoration(
+                hintText: ' Example: 4 will create a 4x4 grid',
               ),
+              keyboardType: TextInputType.number,
+              onSubmitted: (value) {
+                setState(() {
+                  _generation = 0;
+                  grid.rows = int.parse(value);
+                  grid.columns = int.parse(value);
+                  grid.initGrid();
+                });
+              },
             ),
-            _someSpace,
-            Padding(
-              padding: const EdgeInsets.all(28.0),
+            const SizedBox(height: 20),
+            Expanded(
               child: GridWidget(grid: grid),
             ),
+            const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -120,7 +110,7 @@ class _GameOfLifeState extends State<GameOfLife> {
                   color: Colors.orange,
                 ),
               ],
-            )
+            ),
           ],
         ),
       ),
