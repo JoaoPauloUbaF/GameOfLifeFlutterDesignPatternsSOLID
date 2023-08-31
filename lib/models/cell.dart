@@ -1,11 +1,13 @@
 class Cell {
   int x;
   int y;
-  bool alive;
+  CellState health;
 
-  Cell(this.x, this.y, this.alive);
+  Cell(this.x, this.y, this.health);
 
-  get isAlive => alive;
+  get isAlive => health;
   get xCoordinate => x;
   get yCoordinate => y;
 }
+
+enum CellState { alive, dead }

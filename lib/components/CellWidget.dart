@@ -1,20 +1,28 @@
 import 'package:flutter/material.dart';
-    
-class CellWidget extends StatefulWidget {
-  const CellWidget({Key? key}) : super(key: key);
 
-  @override
-  _CellWidgetState createState() => _CellWidgetState();
-}
+import '../models/cell.dart';
+import '../models/grid.dart';
 
-class _CellWidgetState extends State<CellWidget> {
+class CellWidget extends StatelessWidget {
+  const CellWidget({
+    super.key,
+    required this.grid,
+    required this.index,
+  });
+
+  final Grid grid;
+  final int index;
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(''),
+    return Container(
+      decoration: BoxDecoration(
+        color: grid.grid[index].health == CellState.alive
+            ? Colors.black
+            : Colors.white,
+        border: Border.all(color: Colors.grey),
+        borderRadius: BorderRadius.circular(20),
       ),
-      body: Container(),
     );
   }
 }

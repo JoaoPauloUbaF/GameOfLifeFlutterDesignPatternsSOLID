@@ -1,9 +1,11 @@
 import 'dart:math';
 
+import 'package:game_of_life_design_patterns_solid/models/cell.dart';
+
 class Grid {
   late int rows;
   late int columns;
-  late List<List<int>> grid;
+  late List<Cell> grid;
   late Random genLife = Random();
 
   Grid(this.rows, this.columns) {
@@ -11,12 +13,16 @@ class Grid {
   }
 
   void initGrid() {
-    grid = List.generate(rows, (_) => List.filled(columns, 0));
-    for (int i = 0; i < rows; i++) {
-      for (int j = 0; j < columns; j++) {
-        grid[i][j] = genLife.nextBool() ? 1 : 0;
-      }
+    grid = List.generate(rows * columns,
+        (index) => Cell(index ~/ rows, index % columns, CellState.dead));
+    for (var i = 0; i < rows * columns; i++) {
+      grid[i] = Cell(i ~/ rows, i % columns,
+          genLife.nextInt(2) == 1 ? CellState.alive : CellState.dead);
     }
+  }
+
+  Cell findCell(int row, int column) {
+    return grid.firstWhere((cell) => cell.x == row && cell.y == column);
   }
 
   int _countAliveNeighbors(int row, int column) {
@@ -26,7 +32,11 @@ class Grid {
         if (i == 0 && j == 0) continue;
         int r = row + i;
         int c = column + j;
-        if (r >= 0 && r < rows && c >= 0 && c < columns && grid[r][c] == 1) {
+        if (r >= 0 &&
+            r < rows &&
+            c >= 0 &&
+            c < columns &&
+            findCell(r, c).health == CellState.alive) {
           count++;
         }
       }
@@ -35,23 +45,23 @@ class Grid {
   }
 
   void nextGrid() {
-    List<List<int>> nextGrid =
-        List.generate(rows, (_) => List.filled(columns, 0));
-    for (int i = 0; i < rows; i++) {
-      for (int j = 0; j < columns; j++) {
-        int neighbors = _countAliveNeighbors(i, j);
-        if (grid[i][j] == 1) {
-          if (neighbors == 2 || neighbors == 3) {
-            nextGrid[i][j] = 1;
-          } else {
-            nextGrid[i][j] = 0;
-          }
+    List<Cell> nextGrid = List.generate(rows * columns,
+        (index) => Cell(index ~/ rows, index % columns, CellState.dead));
+    for (var i = 0; i < rows * columns; i++) {
+      int row = i ~/ rows;
+      int column = i % columns;
+      int aliveNeighbors = _countAliveNeighbors(row, column);
+      if (findCell(row, column).health == CellState.alive) {
+        if (aliveNeighbors < 2 || aliveNeighbors > 3) {
+          nextGrid[i] = Cell(row, column, CellState.dead);
         } else {
-          if (neighbors == 3) {
-            nextGrid[i][j] = 1;
-          } else {
-            nextGrid[i][j] = 0;
-          }
+          nextGrid[i] = Cell(row, column, CellState.alive);
+        }
+      } else {
+        if (aliveNeighbors == 3) {
+          nextGrid[i] = Cell(row, column, CellState.alive);
+        } else {
+          nextGrid[i] = Cell(row, column, CellState.dead);
         }
       }
     }
