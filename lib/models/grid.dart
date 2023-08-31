@@ -15,6 +15,9 @@ class Grid {
   void initGrid() {
     grid = List.generate(rows * columns,
         (index) => Cell(index ~/ rows, index % columns, CellState.dead));
+  }
+
+  void generateRadomGrid() {
     for (var i = 0; i < rows * columns; i++) {
       grid[i] = Cell(i ~/ rows, i % columns,
           genLife.nextInt(2) == 1 ? CellState.alive : CellState.dead);
@@ -66,5 +69,10 @@ class Grid {
       }
     }
     grid = nextGrid;
+  }
+
+  void setDimension({required int size}) {
+    rows = size;
+    columns = size;
   }
 }

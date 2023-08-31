@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:game_of_life_design_patterns_solid/models/game_of_life.dart';
 
 import 'components/GridWidget.dart';
 import 'models/grid.dart';
@@ -9,43 +10,35 @@ import 'models/grid.dart';
 void main() {
   //add this
   runApp(
-    const MaterialApp(home: GameOfLife()),
+    const MaterialApp(home: GameOfLifeApp()),
   );
 }
 
-class GameOfLife extends StatefulWidget {
-  const GameOfLife({Key? key}) : super(key: key);
+class GameOfLifeApp extends StatefulWidget {
+  const GameOfLifeApp({Key? key}) : super(key: key);
 
   @override
-  _GameOfLifeState createState() => _GameOfLifeState();
+  _GameOfLifeAppState createState() => _GameOfLifeAppState();
 }
 
-class _GameOfLifeState extends State<GameOfLife> {
-  late int _generation;
-
-  late Grid grid;
-
+class _GameOfLifeAppState extends State<GameOfLifeApp> {
   Timer? timer;
 
-  final Widget _someSpace = const SizedBox(
-    height: 20,
-  );
+  GameOfLife gameOfLife = GameOfLife.instance;
 
   @override
   void initState() {
+    gameOfLife.debugState();
     timer = Timer.periodic(const Duration(milliseconds: 1000), (timer) {
-      _tick();
+      gameOfLife.state == GameState.running ? _tick() : timer.cancel();
     });
-
     super.initState();
-    _generation = 0;
-    grid = Grid(20, 20);
   }
 
   void _tick() {
     setState(() {
-      _generation++;
-      grid.nextGrid();
+      gameOfLife.generation++;
+      gameOfLife.nextGeneration();
     });
   }
 
@@ -53,7 +46,7 @@ class _GameOfLifeState extends State<GameOfLife> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Generation: $_generation'),
+        title: Text('Generation: ${gameOfLife.generation}'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -67,16 +60,13 @@ class _GameOfLifeState extends State<GameOfLife> {
               keyboardType: TextInputType.number,
               onSubmitted: (value) {
                 setState(() {
-                  _generation = 0;
-                  grid.rows = int.parse(value);
-                  grid.columns = int.parse(value);
-                  grid.initGrid();
+                  gameOfLife.newGame(int.parse(value), int.parse(value));
                 });
               },
             ),
             const SizedBox(height: 20),
             Expanded(
-              child: GridWidget(grid: grid),
+              child: GridWidget(grid: gameOfLife.grid),
             ),
             const SizedBox(height: 20),
             Row(
@@ -84,11 +74,11 @@ class _GameOfLifeState extends State<GameOfLife> {
               children: [
                 IconButton(
                   onPressed: () {
-                    if (timer!.isActive) {
-                      return;
-                    }
+                    gameOfLife.startGame();
                     timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-                      _tick();
+                      gameOfLife.state == GameState.running
+                          ? _tick()
+                          : timer.cancel();
                     });
                   },
                   icon: const Icon(Icons.play_arrow),
@@ -98,14 +88,16 @@ class _GameOfLifeState extends State<GameOfLife> {
                   onPressed: () => {
                     timer!.isActive ? timer!.cancel() : null,
                     setState(() {
-                      _generation = 0;
-                      grid.initGrid();
+                      gameOfLife.generation = 0;
+                      gameOfLife.stopGame();
                     })
                   },
                   icon: const Icon(Icons.stop),
                 ),
                 IconButton(
-                  onPressed: () => timer!.isActive ? timer!.cancel() : null,
+                  onPressed: () => gameOfLife.state == GameState.running
+                      ? gameOfLife.pauseGame()
+                      : null,
                   icon: const Icon(Icons.pause),
                   color: Colors.orange,
                 ),
