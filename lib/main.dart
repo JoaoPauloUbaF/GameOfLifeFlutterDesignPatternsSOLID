@@ -1,11 +1,9 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:game_of_life_design_patterns_solid/models/game_of_life.dart';
 
-import 'components/GridWidget.dart';
-import 'models/grid.dart';
+import 'components/grid_widget.dart';
 
 void main() {
   //add this
@@ -18,6 +16,7 @@ class GameOfLifeApp extends StatefulWidget {
   const GameOfLifeApp({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _GameOfLifeAppState createState() => _GameOfLifeAppState();
 }
 
@@ -25,6 +24,8 @@ class _GameOfLifeAppState extends State<GameOfLifeApp> {
   Timer? timer;
 
   GameOfLife gameOfLife = GameOfLife.instance;
+
+  var _currentSliderValue = 20.0;
 
   @override
   void initState() {
@@ -52,19 +53,24 @@ class _GameOfLifeAppState extends State<GameOfLifeApp> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            const Text('Enter the dimension'),
-            TextField(
-              decoration: const InputDecoration(
-                hintText: ' Example: 4 will create a 4x4 grid',
-              ),
-              keyboardType: TextInputType.number,
-              onSubmitted: (value) {
+            const Text(
+                'Enter the dimension (Example: 4 will create a 4x4 grid)'),
+            const SizedBox(height: 20),
+            Slider(
+              value: _currentSliderValue,
+              min: 0,
+              max: 50,
+              divisions: 50,
+              label: _currentSliderValue.round().toString(),
+              onChanged: (double value) {
                 setState(() {
-                  gameOfLife.newGame(int.parse(value), int.parse(value));
+                  _currentSliderValue = value;
+                  gameOfLife.newGame(value as int, value as int);
                 });
               },
             ),
-            const SizedBox(height: 20),
+            Text('Grid: $_currentSliderValue x $_currentSliderValue = '
+                '${_currentSliderValue * _currentSliderValue} Cells!'),
             Expanded(
               child: GridWidget(grid: gameOfLife.grid),
             ),
@@ -89,6 +95,7 @@ class _GameOfLifeAppState extends State<GameOfLifeApp> {
                     timer!.isActive ? timer!.cancel() : null,
                     setState(() {
                       gameOfLife.generation = 0;
+                      _currentSliderValue = 20;
                       gameOfLife.stopGame();
                     })
                   },

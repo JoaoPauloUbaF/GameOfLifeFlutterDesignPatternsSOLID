@@ -1,9 +1,7 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:game_of_life_design_patterns_solid/models/cell.dart';
 import '../models/grid.dart';
-import 'CellWidget.dart';
+import 'cell_widget.dart';
 
 class GridWidget extends StatelessWidget {
   const GridWidget({

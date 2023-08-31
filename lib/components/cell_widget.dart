@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../models/cell.dart';
-import '../models/grid.dart';
 
 class RectangleCell extends StatelessWidget {
   final CellState health;
