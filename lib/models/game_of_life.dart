@@ -15,7 +15,6 @@ class GameOfLife {
   }
 
   void startGame() {
-    grid.generateRadomGrid();
     state = GameState.running;
     debugState();
   }

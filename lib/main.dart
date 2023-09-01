@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_of_life_design_patterns_solid/models/game_of_life.dart';
 
 import 'components/grid_widget.dart';
@@ -8,7 +9,12 @@ import 'components/grid_widget.dart';
 void main() {
   //add this
   runApp(
-    const MaterialApp(home: GameOfLifeApp()),
+    const ProviderScope(
+      child: MaterialApp(
+        home: GameOfLifeApp(),
+        debugShowCheckedModeBanner: false,
+      ),
+    ),
   );
 }
 
@@ -25,7 +31,7 @@ class _GameOfLifeAppState extends State<GameOfLifeApp> {
 
   GameOfLife gameOfLife = GameOfLife.instance;
 
-  var _currentSliderValue = 20.0;
+  var _currentStepValue = 20;
 
   @override
   void initState() {
@@ -46,31 +52,55 @@ class _GameOfLifeAppState extends State<GameOfLifeApp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[600],
       appBar: AppBar(
+        backgroundColor: Colors.grey[900],
         title: Text('Generation: ${gameOfLife.generation}'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            const Text(
-                'Enter the dimension (Example: 4 will create a 4x4 grid)'),
             const SizedBox(height: 20),
-            Slider(
-              value: _currentSliderValue,
-              min: 0,
-              max: 50,
-              divisions: 50,
-              label: _currentSliderValue.round().toString(),
-              onChanged: (double value) {
-                setState(() {
-                  _currentSliderValue = value;
-                  gameOfLife.newGame(value as int, value as int);
-                });
-              },
+            Column(
+              children: [
+                const Text(
+                    'Enter the dimension (Example: 4 will create a 4x4 grid)'),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    IconButton(
+                      icon: const Icon(Icons.remove),
+                      onPressed: () {
+                        setState(() {
+                          if (_currentStepValue > 0) {
+                            _currentStepValue--;
+                            gameOfLife.newGame(
+                                _currentStepValue, _currentStepValue);
+                          }
+                        });
+                      },
+                    ),
+                    Text('$_currentStepValue'),
+                    IconButton(
+                      icon: const Icon(Icons.add),
+                      onPressed: () {
+                        setState(() {
+                          if (_currentStepValue < 50) {
+                            // Defina o limite superior conforme necessário
+                            _currentStepValue++;
+                            gameOfLife.newGame(
+                                _currentStepValue, _currentStepValue);
+                          }
+                        });
+                      },
+                    ),
+                  ],
+                ),
+              ],
             ),
-            Text('Grid: $_currentSliderValue x $_currentSliderValue = '
-                '${_currentSliderValue * _currentSliderValue} Cells!'),
+            Text('Grid: $_currentStepValue x $_currentStepValue = '
+                '${_currentStepValue * _currentStepValue} Cells!'),
             Expanded(
               child: GridWidget(grid: gameOfLife.grid),
             ),
@@ -79,7 +109,11 @@ class _GameOfLifeAppState extends State<GameOfLifeApp> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 IconButton(
+                  hoverColor: Colors.transparent,
                   onPressed: () {
+                    if (!gameOfLife.grid.anyAliveCells()) {
+                      return;
+                    }
                     gameOfLife.startGame();
                     timer = Timer.periodic(const Duration(seconds: 1), (timer) {
                       gameOfLife.state == GameState.running
@@ -91,22 +125,34 @@ class _GameOfLifeAppState extends State<GameOfLifeApp> {
                   color: Colors.green,
                 ),
                 IconButton(
+                  hoverColor: Colors.transparent,
                   onPressed: () => {
                     timer!.isActive ? timer!.cancel() : null,
                     setState(() {
                       gameOfLife.generation = 0;
-                      _currentSliderValue = 20;
+                      _currentStepValue = 20;
                       gameOfLife.stopGame();
                     })
                   },
                   icon: const Icon(Icons.stop),
                 ),
                 IconButton(
+                  hoverColor: Colors.transparent,
                   onPressed: () => gameOfLife.state == GameState.running
                       ? gameOfLife.pauseGame()
                       : null,
                   icon: const Icon(Icons.pause),
                   color: Colors.orange,
+                ),
+                IconButton(
+                  hoverColor: Colors.transparent,
+                  onPressed: () {
+                    setState(() {
+                      gameOfLife.grid.generateRadomGrid();
+                    });
+                  },
+                  icon: const Icon(Icons.shuffle),
+                  color: Colors.blue,
                 ),
               ],
             ),

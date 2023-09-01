@@ -12,6 +12,15 @@ class Grid {
     initGrid();
   }
 
+  bool anyAliveCells() {
+    bool anyAlive = false;
+    for (var cell in grid) {
+      cell.health == CellState.alive ? anyAlive = true : anyAlive = false;
+      if (anyAlive) break;
+    }
+    return anyAlive;
+  }
+
   void initGrid() {
     grid = List.generate(rows * columns,
         (index) => Cell(index ~/ rows, index % columns, CellState.dead));

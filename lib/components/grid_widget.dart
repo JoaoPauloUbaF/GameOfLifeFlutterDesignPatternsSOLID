@@ -19,8 +19,7 @@ class GridWidget extends StatelessWidget {
       ),
       itemBuilder: (context, index) {
         Cell cell = grid.grid[index];
-
-        return CircleCell(health: cell.health);
+        return CircleCell(cell: cell);
       },
       itemCount: grid.grid.length,
     );

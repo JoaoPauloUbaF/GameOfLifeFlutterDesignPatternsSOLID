@@ -19,18 +19,33 @@ class RectangleCell extends StatelessWidget {
   }
 }
 
-class CircleCell extends StatelessWidget {
-  final CellState health;
+class CircleCell extends StatefulWidget {
+  final Cell cell;
 
-  const CircleCell({super.key, required this.health});
+  const CircleCell({super.key, required this.cell});
 
   @override
+  State<CircleCell> createState() => _CircleCellState();
+}
+
+class _CircleCellState extends State<CircleCell> {
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: health == CellState.alive ? Colors.amber : Colors.transparent,
-        border: Border.all(color: Colors.black),
+    return GestureDetector(
+      onTap: () {
+        widget.cell.health = widget.cell.health == CellState.alive
+            ? CellState.dead
+            : CellState.alive;
+        setState(() {});
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: widget.cell.health == CellState.alive
+              ? Colors.amber
+              : Colors.transparent,
+          border: Border.all(color: Colors.black),
+        ),
       ),
     );
   }
