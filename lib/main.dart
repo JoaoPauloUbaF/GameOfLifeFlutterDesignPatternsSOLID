@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_of_life_design_patterns_solid/components/player_widget.dart';
 import 'package:game_of_life_design_patterns_solid/models/game_of_life.dart';
 
+import 'components/game_settings_widget.dart';
 import 'components/grid_widget.dart';
 
 void main() {
@@ -32,8 +33,6 @@ class _GameOfLifeAppState extends State<GameOfLifeApp> {
 
   GameOfLife gameOfLife = GameOfLife.instance;
 
-  var _currentStepValue = 20;
-
   @override
   void initState() {
     super.initState();
@@ -44,62 +43,38 @@ class _GameOfLifeAppState extends State<GameOfLifeApp> {
     return Scaffold(
       backgroundColor: Colors.grey[600],
       appBar: AppBar(
-        backgroundColor: Colors.grey[900],
-        title: Text('Generation: ${gameOfLife.generation}'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            const SizedBox(height: 20),
-            Column(
-              children: [
-                const Text(
-                    'Enter the dimension (Example: 4 will create a 4x4 grid)'),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    IconButton(
-                      icon: const Icon(Icons.remove),
-                      onPressed: () {
-                        setState(() {
-                          if (_currentStepValue > 0) {
-                            _currentStepValue--;
-                            gameOfLife.newGame(
-                                _currentStepValue, _currentStepValue);
-                          }
-                        });
-                      },
-                    ),
-                    Text('$_currentStepValue'),
-                    IconButton(
-                      icon: const Icon(Icons.add),
-                      onPressed: () {
-                        setState(() {
-                          if (_currentStepValue < 50) {
-                            // Defina o limite superior conforme necessário
-                            _currentStepValue++;
-                            gameOfLife.newGame(
-                                _currentStepValue, _currentStepValue);
-                          }
-                        });
-                      },
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            Text('Grid: $_currentStepValue x $_currentStepValue = '
-                '${_currentStepValue * _currentStepValue} Cells!'),
-            Expanded(
-              child: GridWidget(
-                grid: gameOfLife.grid,
+          backgroundColor: Colors.grey[900],
+          title: const Center(
+            child: Text(
+              'Game of Life with Design Patterns',
+              style: TextStyle(
+                color: Colors.white,
               ),
             ),
-            const SizedBox(height: 20),
-            const PlayerWidget(),
-          ],
-        ),
+          )),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Consumer(
+                builder: (BuildContext context, WidgetRef ref, Widget? child) {
+              var _ = ref.watch(gameOfLifeProvider);
+              return Text(
+                  'Geração ${ref.watch(gameOfLifeProvider.notifier).generation}',
+                  style: const TextStyle(fontSize: 20));
+            }),
+          ),
+          const SizedBox(height: 20),
+          SizedBox(
+            width: MediaQuery.of(context).size.width * 0.7,
+            height: MediaQuery.of(context).size.height * 0.6,
+            child: GridWidget(),
+          ),
+          const SizedBox(height: 20),
+          const GameSettingsWidget(),
+          const PlayerWidget(),
+        ],
       ),
     );
   }

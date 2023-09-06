@@ -3,28 +3,24 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_of_life_design_patterns_solid/controllers/tick_controller.dart';
 import 'package:game_of_life_design_patterns_solid/models/cell.dart';
 import 'package:game_of_life_design_patterns_solid/models/game_of_life.dart';
+import 'package:game_of_life_design_patterns_solid/utils/time_utils.dart';
 import 'package:intl/intl.dart';
 import '../models/grid.dart';
 import 'cell_widget.dart';
 
 class GridWidget extends ConsumerWidget {
-  GridWidget({
-    super.key,
-    required this.grid,
-  });
+  final GameOfLife gameOfLife = GameOfLife.instance;
 
-  late Grid grid;
-
+  GridWidget({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentGameState = ref.watch(gameOfLifeProvider);
+    var _ = ref.watch(gameOfLifeProvider);
     final currentTime = ref.watch(tickProvider);
     var currentGame = ref.watch(gameOfLifeProvider.notifier);
-    Grid grid = currentGame.grid;
-    grid.nextGrid();
+    var timeStr = formatDuration(currentTime);
     return Column(
       children: [
-        Text(DateFormat.Hms().format(currentTime)),
+        Text('Tempo Decorrido: $timeStr'),
         Expanded(
           child: GridView.builder(
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

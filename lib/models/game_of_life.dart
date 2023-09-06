@@ -11,7 +11,7 @@ class GameOfLife extends Notifier<GameState> {
 
   late int generation = 0;
 
-  Grid grid = Grid(20, 20);
+  Grid grid = Grid();
 
   late Tick timer;
 
@@ -20,10 +20,9 @@ class GameOfLife extends Notifier<GameState> {
   }
 
   void startGame() {
-    if (!grid.anyAliveCells()) {
+    if (!grid.anyAliveCells() || state == GameState.running) {
       return;
     }
-
     state = GameState.running;
     timer.startTimer();
     debugState();
@@ -34,7 +33,7 @@ class GameOfLife extends Notifier<GameState> {
       return;
     }
     timer.cancelTimer();
-    grid = Grid(20, 20);
+    grid = Grid();
     state = GameState.stopped;
     debugState();
   }
@@ -43,24 +42,26 @@ class GameOfLife extends Notifier<GameState> {
     if (state == GameState.paused) {
       return;
     }
-    timer.cancelTimer();
     state = GameState.paused;
+    timer.cancelTimer();
     debugState();
   }
 
   void nextGeneration() {
-    generation++;
-    state = GameState.loading;
-    grid.nextGrid();
-    state = GameState.running;
+    if (state == GameState.running) {
+      generation++;
+      state = GameState.loading;
+      grid.nextGrid();
+      state = GameState.running;
+    }
   }
 
   void newGame(int rows, int columns) {
+    state = GameState.loading;
     timer.cancelTimer();
     generation = 0;
-    grid = Grid(rows, columns);
+    grid.createGrid(rows: rows, columns: columns);
     state = GameState.stopped;
-    grid.initGrid();
     debugState();
   }
 

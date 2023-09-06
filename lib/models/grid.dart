@@ -8,8 +8,8 @@ class Grid {
   late List<Cell> frame;
   late Random genLife = Random();
 
-  Grid(this.rows, this.columns) {
-    initGrid();
+  Grid() {
+    createGrid();
   }
 
   bool anyAliveCells() {
@@ -21,7 +21,9 @@ class Grid {
     return anyAlive;
   }
 
-  void initGrid() {
+  void createGrid({int rows = 20, int columns = 20}) {
+    this.rows = rows;
+    this.columns = columns;
     frame = List.generate(rows * columns,
         (index) => Cell(index ~/ rows, index % columns, CellState.dead));
   }

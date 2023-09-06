@@ -15,37 +15,24 @@ class PlayerWidget extends ConsumerWidget {
       children: [
         IconButton(
           hoverColor: Colors.transparent,
-          onPressed: () {
-            if (currentGameState != GameState.ready) {
-              return;
-            }
-            currentGame.startGame();
-          },
+          onPressed: () => currentGame.startGame(),
           icon: const Icon(Icons.play_arrow),
           color: Colors.green,
         ),
         IconButton(
           hoverColor: Colors.transparent,
-          onPressed: () => {
-            currentGameState != GameState.stopped
-                ? currentGame.stopGame()
-                : null,
-          },
+          onPressed: () => currentGame.stopGame(),
           icon: const Icon(Icons.stop),
         ),
         IconButton(
           hoverColor: Colors.transparent,
-          onPressed: () => currentGame.state == GameState.running
-              ? currentGame.pauseGame()
-              : null,
+          onPressed: () => currentGame.pauseGame(),
           icon: const Icon(Icons.pause),
           color: Colors.orange,
         ),
         IconButton(
           hoverColor: Colors.transparent,
-          onPressed: () {
-            currentGame.randomGame();
-          },
+          onPressed: () => currentGame.randomGame(),
           icon: const Icon(Icons.shuffle),
           color: Colors.blue,
         ),
