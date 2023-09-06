@@ -5,7 +5,7 @@ import 'package:game_of_life_design_patterns_solid/models/cell.dart';
 class Grid {
   late int rows;
   late int columns;
-  late List<Cell> grid;
+  late List<Cell> frame;
   late Random genLife = Random();
 
   Grid(this.rows, this.columns) {
@@ -14,7 +14,7 @@ class Grid {
 
   bool anyAliveCells() {
     bool anyAlive = false;
-    for (var cell in grid) {
+    for (var cell in frame) {
       cell.health == CellState.alive ? anyAlive = true : anyAlive = false;
       if (anyAlive) break;
     }
@@ -22,19 +22,19 @@ class Grid {
   }
 
   void initGrid() {
-    grid = List.generate(rows * columns,
+    frame = List.generate(rows * columns,
         (index) => Cell(index ~/ rows, index % columns, CellState.dead));
   }
 
   void generateRadomGrid() {
     for (var i = 0; i < rows * columns; i++) {
-      grid[i] = Cell(i ~/ rows, i % columns,
+      frame[i] = Cell(i ~/ rows, i % columns,
           genLife.nextInt(2) == 1 ? CellState.alive : CellState.dead);
     }
   }
 
   Cell findCell(int row, int column) {
-    return grid.firstWhere((cell) => cell.x == row && cell.y == column);
+    return frame.firstWhere((cell) => cell.x == row && cell.y == column);
   }
 
   int _countAliveNeighbors(int row, int column) {
@@ -77,7 +77,7 @@ class Grid {
         }
       }
     }
-    grid = nextGrid;
+    frame = nextGrid;
   }
 
   void setDimension({required int size}) {

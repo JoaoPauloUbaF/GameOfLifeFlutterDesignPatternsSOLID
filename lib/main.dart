@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:game_of_life_design_patterns_solid/components/player_widget.dart';
 import 'package:game_of_life_design_patterns_solid/models/game_of_life.dart';
 
 import 'components/grid_widget.dart';
@@ -35,18 +36,7 @@ class _GameOfLifeAppState extends State<GameOfLifeApp> {
 
   @override
   void initState() {
-    gameOfLife.debugState();
-    timer = Timer.periodic(const Duration(milliseconds: 1000), (timer) {
-      gameOfLife.state == GameState.running ? _tick() : timer.cancel();
-    });
     super.initState();
-  }
-
-  void _tick() {
-    setState(() {
-      gameOfLife.generation++;
-      gameOfLife.nextGeneration();
-    });
   }
 
   @override
@@ -102,60 +92,12 @@ class _GameOfLifeAppState extends State<GameOfLifeApp> {
             Text('Grid: $_currentStepValue x $_currentStepValue = '
                 '${_currentStepValue * _currentStepValue} Cells!'),
             Expanded(
-              child: GridWidget(grid: gameOfLife.grid),
+              child: GridWidget(
+                grid: gameOfLife.grid,
+              ),
             ),
             const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                IconButton(
-                  hoverColor: Colors.transparent,
-                  onPressed: () {
-                    if (!gameOfLife.grid.anyAliveCells()) {
-                      return;
-                    }
-                    gameOfLife.startGame();
-                    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-                      gameOfLife.state == GameState.running
-                          ? _tick()
-                          : timer.cancel();
-                    });
-                  },
-                  icon: const Icon(Icons.play_arrow),
-                  color: Colors.green,
-                ),
-                IconButton(
-                  hoverColor: Colors.transparent,
-                  onPressed: () => {
-                    timer!.isActive ? timer!.cancel() : null,
-                    setState(() {
-                      gameOfLife.generation = 0;
-                      _currentStepValue = 20;
-                      gameOfLife.stopGame();
-                    })
-                  },
-                  icon: const Icon(Icons.stop),
-                ),
-                IconButton(
-                  hoverColor: Colors.transparent,
-                  onPressed: () => gameOfLife.state == GameState.running
-                      ? gameOfLife.pauseGame()
-                      : null,
-                  icon: const Icon(Icons.pause),
-                  color: Colors.orange,
-                ),
-                IconButton(
-                  hoverColor: Colors.transparent,
-                  onPressed: () {
-                    setState(() {
-                      gameOfLife.grid.generateRadomGrid();
-                    });
-                  },
-                  icon: const Icon(Icons.shuffle),
-                  color: Colors.blue,
-                ),
-              ],
-            ),
+            const PlayerWidget(),
           ],
         ),
       ),
