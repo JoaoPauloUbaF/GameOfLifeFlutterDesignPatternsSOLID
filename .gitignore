@@ -36,7 +36,7 @@ migrate_working_dir/
 .linux/
 .macos/
 .windows/
-.web/
+.web
 
 # Symbolication related
 app.*.symbols

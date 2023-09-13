@@ -2,11 +2,13 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:game_of_life_design_patterns_solid/controllers/dimension_stepper.dart';
 import 'package:game_of_life_design_patterns_solid/controllers/tick_controller.dart';
 
 import 'grid.dart';
 
 class GameOfLife extends Notifier<GameState> {
+  // To-do: change the notifier to be a grid changed notifier
   static GameOfLife? _instance;
 
   late int generation = 0;
@@ -32,6 +34,8 @@ class GameOfLife extends Notifier<GameState> {
     if (state == GameState.stopped) {
       return;
     }
+    generation = 0;
+    ref.read(dimensionStepperProvider.notifier).reset();
     timer.cancelTimer();
     grid = Grid();
     state = GameState.stopped;
@@ -57,10 +61,10 @@ class GameOfLife extends Notifier<GameState> {
   }
 
   void newGame(int rows, int columns) {
+    grid.createGrid(rows: rows, columns: columns);
     state = GameState.loading;
     timer.cancelTimer();
     generation = 0;
-    grid.createGrid(rows: rows, columns: columns);
     state = GameState.stopped;
     debugState();
   }

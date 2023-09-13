@@ -1,21 +1,31 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:game_of_life_design_patterns_solid/models/game_of_life.dart';
 
 class DimensionStepper extends Notifier<int> {
   @override
   int build() {
-    return 20;
+    return 5;
   }
 
   void increment() {
-    if (state < 50) {
-      state++;
+    if (state >= 30) {
+      return;
     }
+    state++;
+    ref.read(gameOfLifeProvider.notifier).newGame(state, state);
   }
 
   void decrement() {
-    if (state > 10) {
-      state--;
+    if (state <= 5) {
+      return;
     }
+    state--;
+    ref.read(gameOfLifeProvider.notifier).newGame(state, state);
+  }
+
+  void reset() {
+    state = 5;
+    ref.read(gameOfLifeProvider.notifier).newGame(state, state);
   }
 }
 

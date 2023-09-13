@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:game_of_life_design_patterns_solid/models/cell.dart';
+import 'package:game_of_life_design_patterns_solid/models/cell_factory.dart';
 
 class Grid {
   late int rows;
@@ -15,28 +16,34 @@ class Grid {
   bool anyAliveCells() {
     bool anyAlive = false;
     for (var cell in frame) {
-      cell.health == CellState.alive ? anyAlive = true : anyAlive = false;
+      cell.cellHealth == CellState.alive ? anyAlive = true : anyAlive = false;
       if (anyAlive) break;
     }
     return anyAlive;
   }
 
-  void createGrid({int rows = 20, int columns = 20}) {
+  void createGrid({int rows = 5, int columns = 5}) {
     this.rows = rows;
     this.columns = columns;
-    frame = List.generate(rows * columns,
-        (index) => Cell(index ~/ rows, index % columns, CellState.dead));
+    frame = List.generate(
+        rows * columns,
+        (index) => CellFactory.createCell(
+            CellType.bacteria, index ~/ rows, index % columns, CellState.dead));
   }
 
   void generateRadomGrid() {
     for (var i = 0; i < rows * columns; i++) {
-      frame[i] = Cell(i ~/ rows, i % columns,
+      frame[i] = CellFactory.createCell(
+          CellType.bacteria,
+          i ~/ rows,
+          i % columns,
           genLife.nextInt(2) == 1 ? CellState.alive : CellState.dead);
     }
   }
 
   Cell findCell(int row, int column) {
-    return frame.firstWhere((cell) => cell.x == row && cell.y == column);
+    return frame
+        .firstWhere((cell) => cell.cellXPos == row && cell.cellYPos == column);
   }
 
   int _countAliveNeighbors(int row, int column) {
@@ -50,7 +57,7 @@ class Grid {
             r < rows &&
             c >= 0 &&
             c < columns &&
-            findCell(r, c).health == CellState.alive) {
+            findCell(r, c).cellHealth == CellState.alive) {
           count++;
         }
       }
@@ -59,23 +66,29 @@ class Grid {
   }
 
   void nextGrid() {
-    List<Cell> nextGrid = List.generate(rows * columns,
-        (index) => Cell(index ~/ rows, index % columns, CellState.dead));
+    List<Cell> nextGrid = List.generate(
+        rows * columns,
+        (index) => CellFactory.createCell(
+            CellType.bacteria, index ~/ rows, index % columns, CellState.dead));
     for (var i = 0; i < rows * columns; i++) {
       int row = i ~/ rows;
       int column = i % columns;
       int aliveNeighbors = _countAliveNeighbors(row, column);
-      if (findCell(row, column).health == CellState.alive) {
+      if (findCell(row, column).cellHealth == CellState.alive) {
         if (aliveNeighbors < 2 || aliveNeighbors > 3) {
-          nextGrid[i] = Cell(row, column, CellState.dead);
+          nextGrid[i] = CellFactory.createCell(
+              CellType.bacteria, row, column, CellState.dead);
         } else {
-          nextGrid[i] = Cell(row, column, CellState.alive);
+          nextGrid[i] = CellFactory.createCell(
+              CellType.bacteria, row, column, CellState.alive);
         }
       } else {
         if (aliveNeighbors == 3) {
-          nextGrid[i] = Cell(row, column, CellState.alive);
+          nextGrid[i] = CellFactory.createCell(
+              CellType.bacteria, row, column, CellState.alive);
         } else {
-          nextGrid[i] = Cell(row, column, CellState.dead);
+          nextGrid[i] = CellFactory.createCell(
+              CellType.bacteria, row, column, CellState.dead);
         }
       }
     }

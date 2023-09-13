@@ -8,42 +8,39 @@ class GameSettingsWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var currentStep = ref.read(dimensionStepperProvider.notifier);
-    var currentStepValue = ref.watch(dimensionStepperProvider);
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        GameConfigCard(
-            currentStep: currentStep,
-            currentStepValue: currentStepValue,
-            ref: ref),
-        GameConfigCard(
-            currentStep: currentStep,
-            currentStepValue: currentStepValue,
-            ref: ref),
-        GameConfigCard(
-            currentStep: currentStep,
-            currentStepValue: currentStepValue,
-            ref: ref),
-      ],
+    return const Padding(
+      padding: EdgeInsets.all(8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          GridDimensionConfigCard(
+            title: 'Enter the dimension',
+            subtitle: '4 will create a 4x4 grids',
+            bottomText: '',
+          ),
+        ],
+      ),
     );
   }
 }
 
-class GameConfigCard extends StatelessWidget {
-  const GameConfigCard({
+class GridDimensionConfigCard extends ConsumerWidget {
+  const GridDimensionConfigCard({
     super.key,
-    required this.currentStep,
-    required this.currentStepValue,
-    required this.ref,
+    required this.title,
+    required this.subtitle,
+    required this.bottomText,
   });
 
-  final WidgetRef ref;
-  final DimensionStepper currentStep;
-  final int currentStepValue;
+  final String title;
+  final String subtitle;
+  final String bottomText;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    int dimensionValue = ref.watch(dimensionStepperProvider);
+    var dimension = ref.read(dimensionStepperProvider.notifier);
     return Container(
       decoration: BoxDecoration(
         border: Border.all(color: Colors.black),
@@ -54,8 +51,8 @@ class GameConfigCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Text('Enter the dimension'),
-            const Text('(4 will create a 4x4 grid)'),
+            Text(title),
+            Text(subtitle),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
@@ -74,10 +71,7 @@ class GameConfigCard extends StatelessWidget {
                         color: Colors.white,
                         icon: const Icon(Icons.remove),
                         onPressed: () {
-                          currentStep.decrement();
-                          ref
-                              .read(gameOfLifeProvider.notifier)
-                              .newGame(currentStepValue, currentStepValue);
+                          dimension.decrement();
                         },
                       ),
                     ),
@@ -85,7 +79,7 @@ class GameConfigCard extends StatelessWidget {
                       width: 40,
                       height: 40,
                       color: Colors.grey[300],
-                      child: Center(child: Text(' $currentStepValue ')),
+                      child: Center(child: Text(' $dimensionValue ')),
                     ),
                     Container(
                       decoration: const BoxDecoration(
@@ -95,10 +89,7 @@ class GameConfigCard extends StatelessWidget {
                         color: Colors.white,
                         icon: const Icon(Icons.add),
                         onPressed: () {
-                          currentStep.increment();
-                          ref
-                              .read(gameOfLifeProvider.notifier)
-                              .newGame(currentStepValue, currentStepValue);
+                          dimension.increment();
                         },
                       ),
                     ),
@@ -106,8 +97,8 @@ class GameConfigCard extends StatelessWidget {
                 ),
               ),
             ),
-            Text('Grid: $currentStepValue x $currentStepValue = '
-                '${currentStepValue * currentStepValue} Cells!'),
+            Text('Grid: $dimensionValue x $dimensionValue = '
+                '${dimensionValue * dimensionValue} Cells!'),
           ],
         ),
       ),

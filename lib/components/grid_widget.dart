@@ -15,13 +15,15 @@ class GridWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var _ = ref.watch(gameOfLifeProvider);
-    final currentTime = ref.watch(tickProvider);
-    var currentGame = ref.watch(gameOfLifeProvider.notifier);
+    final currentTime = ref.read(tickProvider);
+    var currentGame = ref.read(gameOfLifeProvider.notifier);
     var timeStr = formatDuration(currentTime);
     return Column(
       children: [
         Text('Tempo Decorrido: $timeStr'),
-        Expanded(
+        SizedBox(
+          width: MediaQuery.of(context).size.width * 0.7,
+          height: MediaQuery.of(context).size.width * 0.7,
           child: GridView.builder(
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: currentGame.grid.columns,

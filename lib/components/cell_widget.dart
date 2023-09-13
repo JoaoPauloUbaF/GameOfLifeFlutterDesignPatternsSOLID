@@ -33,7 +33,7 @@ class _CircleCellState extends State<CircleCell> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        widget.cell.health = widget.cell.health == CellState.alive
+        widget.cell.cellHealth = widget.cell.cellHealth == CellState.alive
             ? CellState.dead
             : CellState.alive;
         setState(() {});
@@ -41,9 +41,7 @@ class _CircleCellState extends State<CircleCell> {
       child: Container(
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: widget.cell.health == CellState.alive
-              ? Colors.amber
-              : Colors.transparent,
+          color: widget.cell.getColor(),
           border: Border.all(color: Colors.black),
         ),
       ),

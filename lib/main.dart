@@ -52,29 +52,25 @@ class _GameOfLifeAppState extends State<GameOfLifeApp> {
               ),
             ),
           )),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Consumer(
-                builder: (BuildContext context, WidgetRef ref, Widget? child) {
-              var _ = ref.watch(gameOfLifeProvider);
-              return Text(
-                  'Geração ${ref.watch(gameOfLifeProvider.notifier).generation}',
-                  style: const TextStyle(fontSize: 20));
-            }),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Consumer(builder:
+                  (BuildContext context, WidgetRef ref, Widget? child) {
+                var _ = ref.watch(gameOfLifeProvider);
+                return Text(
+                    'Geração ${ref.watch(gameOfLifeProvider.notifier).generation}',
+                    style: const TextStyle(fontSize: 20));
+              }),
+              GridWidget(),
+              const GameSettingsWidget(),
+              const PlayerWidget(),
+            ],
           ),
-          const SizedBox(height: 20),
-          SizedBox(
-            width: MediaQuery.of(context).size.width * 0.7,
-            height: MediaQuery.of(context).size.height * 0.6,
-            child: GridWidget(),
-          ),
-          const SizedBox(height: 20),
-          const GameSettingsWidget(),
-          const PlayerWidget(),
-        ],
+        ),
       ),
     );
   }
