@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 abstract class Cell {
-  CellType cellType = CellType.cell;
+  CellType? cellType;
   int cellXPos = 0;
   int cellYPos = 0;
   CellState cellHealth = CellState.dead;
@@ -51,7 +52,7 @@ class Bacteria extends Cell {
 
 class NullCell extends Cell {
   NullCell() {
-    cellType = CellType.cell;
+    cellType = CellType.bacteria;
     cellXPos = 0;
     cellYPos = 0;
     cellHealth = CellState.dead;
@@ -65,6 +66,20 @@ class NullCell extends Cell {
   }
 }
 
+class CellTypeNotifier extends Notifier<CellType> {
+  void setCellType(CellType cellType) {
+    state = cellType;
+  }
+
+  @override
+  CellType build() {
+    return CellType.bacteria;
+  }
+}
+
+final cellTypeProvider =
+    NotifierProvider<CellTypeNotifier, CellType>(CellTypeNotifier.new);
+
 enum CellState { alive, dead }
 
-enum CellType { cell, virus, bacteria }
+enum CellType { virus, bacteria }

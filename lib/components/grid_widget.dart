@@ -5,7 +5,7 @@ import 'package:game_of_life_design_patterns_solid/models/cell.dart';
 import 'package:game_of_life_design_patterns_solid/models/game_of_life.dart';
 import 'package:game_of_life_design_patterns_solid/utils/time_utils.dart';
 import 'package:intl/intl.dart';
-import '../models/grid.dart';
+import '../models/classic_grid.dart';
 import 'cell_widget.dart';
 
 class GridWidget extends ConsumerWidget {

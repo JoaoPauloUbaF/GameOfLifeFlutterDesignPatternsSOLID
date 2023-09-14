@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:game_of_life_design_patterns_solid/components/cell_type_selector.dart';
 import 'package:game_of_life_design_patterns_solid/components/player_widget.dart';
 import 'package:game_of_life_design_patterns_solid/models/game_of_life.dart';
 
@@ -41,7 +42,6 @@ class _GameOfLifeAppState extends State<GameOfLifeApp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[600],
       appBar: AppBar(
           backgroundColor: Colors.grey[900],
           title: const Center(
@@ -52,7 +52,7 @@ class _GameOfLifeAppState extends State<GameOfLifeApp> {
               ),
             ),
           )),
-      body: Center(
+      body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
@@ -65,8 +65,8 @@ class _GameOfLifeAppState extends State<GameOfLifeApp> {
                     'Geração ${ref.watch(gameOfLifeProvider.notifier).generation}',
                     style: const TextStyle(fontSize: 20));
               }),
-              GridWidget(),
               const GameSettingsWidget(),
+              GridWidget(),
               const PlayerWidget(),
             ],
           ),

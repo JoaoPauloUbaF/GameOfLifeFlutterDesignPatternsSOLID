@@ -9,7 +9,7 @@ class Tick extends Notifier<Duration> {
 
   @override
   Duration build() {
-    _timer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
+    _timer = Timer.periodic(const Duration(milliseconds: 1000), (timer) {
       state = Duration.zero;
     });
     cancelTimer();
@@ -26,7 +26,7 @@ class Tick extends Notifier<Duration> {
       return;
     }
     init = DateTime.now();
-    _timer = Timer.periodic(const Duration(milliseconds: 500), (timer) {
+    _timer = Timer.periodic(const Duration(milliseconds: 1000), (timer) {
       ref.read(gameOfLifeProvider.notifier).nextGeneration();
       state = DateTime.now().difference(init);
     });

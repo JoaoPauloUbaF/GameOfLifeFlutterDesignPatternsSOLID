@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_of_life_design_patterns_solid/controllers/dimension_stepper.dart';
 import 'package:game_of_life_design_patterns_solid/controllers/tick_controller.dart';
+import 'package:game_of_life_design_patterns_solid/models/cell.dart';
+import 'package:game_of_life_design_patterns_solid/models/easy_life_grid.dart';
+import 'package:game_of_life_design_patterns_solid/models/grid.dart';
 
-import 'grid.dart';
+import 'classic_grid.dart';
 
 class GameOfLife extends Notifier<GameState> {
   // To-do: change the notifier to be a grid changed notifier
@@ -13,7 +16,7 @@ class GameOfLife extends Notifier<GameState> {
 
   late int generation = 0;
 
-  Grid grid = Grid();
+  late Grid grid;
 
   late Tick timer;
 
@@ -31,13 +34,10 @@ class GameOfLife extends Notifier<GameState> {
   }
 
   void stopGame() {
-    if (state == GameState.stopped) {
-      return;
-    }
     generation = 0;
     ref.read(dimensionStepperProvider.notifier).reset();
     timer.cancelTimer();
-    grid = Grid();
+    grid = ClassicGrid(ref.read(cellTypeProvider));
     state = GameState.stopped;
     debugState();
   }
@@ -83,12 +83,14 @@ class GameOfLife extends Notifier<GameState> {
 
   @override
   GameState build() {
+    grid = EasyLifeGrid(ref.read(cellTypeProvider));
     timer = ref.watch(tickProvider.notifier);
     return GameState.stopped;
   }
 }
 
 final gameOfLifeProvider = NotifierProvider<GameOfLife, GameState>(() {
+  // var cellType = ref.read(cellTypeProvider);
   return GameOfLife.instance;
 });
 

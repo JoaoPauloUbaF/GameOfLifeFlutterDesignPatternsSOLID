@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:game_of_life_design_patterns_solid/components/player_widget.dart';
 import 'package:game_of_life_design_patterns_solid/controllers/dimension_stepper.dart';
 import 'package:game_of_life_design_patterns_solid/models/game_of_life.dart';
+
+import 'cell_type_selector.dart';
 
 class GameSettingsWidget extends ConsumerWidget {
   const GameSettingsWidget({super.key});
@@ -12,12 +15,26 @@ class GameSettingsWidget extends ConsumerWidget {
       padding: EdgeInsets.all(8.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          GridDimensionConfigCard(
-            title: 'Enter the dimension',
-            subtitle: '4 will create a 4x4 grids',
-            bottomText: '',
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              SizedBox(
+                width: 20,
+              ),
+              GridDimensionConfigCard(
+                title: 'Enter the dimension',
+                subtitle: '4 will create a 4x4 grids',
+                bottomText: '',
+              ),
+              SizedBox(
+                width: 20,
+              ),
+              CellTypeSelector(),
+              SizedBox(
+                width: 20,
+              ),
+            ],
           ),
         ],
       ),
