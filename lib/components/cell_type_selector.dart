@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_of_life_design_patterns_solid/models/cell.dart';
-import 'package:game_of_life_design_patterns_solid/models/game_of_life.dart';
 
 class CellTypeSelector extends ConsumerWidget {
   const CellTypeSelector({Key? key}) : super(key: key);

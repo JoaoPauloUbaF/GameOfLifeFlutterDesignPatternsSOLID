@@ -4,8 +4,6 @@ import 'package:game_of_life_design_patterns_solid/controllers/tick_controller.d
 import 'package:game_of_life_design_patterns_solid/models/cell.dart';
 import 'package:game_of_life_design_patterns_solid/models/game_of_life.dart';
 import 'package:game_of_life_design_patterns_solid/utils/time_utils.dart';
-import 'package:intl/intl.dart';
-import '../models/classic_grid.dart';
 import 'cell_widget.dart';
 
 class GridWidget extends ConsumerWidget {
@@ -22,7 +20,7 @@ class GridWidget extends ConsumerWidget {
       children: [
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Text('Tempo Decorrido: $timeStr'),
+          child: Text(timeStr),
         ),
         SizedBox(
           width: MediaQuery.of(context).size.width * 0.7,

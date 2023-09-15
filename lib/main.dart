@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:game_of_life_design_patterns_solid/components/cell_type_selector.dart';
 import 'package:game_of_life_design_patterns_solid/components/player_widget.dart';
 import 'package:game_of_life_design_patterns_solid/models/game_of_life.dart';
 

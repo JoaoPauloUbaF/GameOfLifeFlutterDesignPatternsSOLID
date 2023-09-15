@@ -8,7 +8,6 @@ class GridRulesSelector extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var gridTypeSelected = ref.watch(gridTypeProvider);
-    var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
     return Container(
       width: width / 4,
