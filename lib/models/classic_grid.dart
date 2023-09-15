@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_of_life_design_patterns_solid/models/cell.dart';
 import 'package:game_of_life_design_patterns_solid/models/cell_factory.dart';
 
@@ -8,9 +9,10 @@ import 'grid.dart';
 class ClassicGrid extends Grid {
   late Random genLife = Random();
   CellType cellType = CellType.virus;
+  ProviderContainer container = ProviderContainer();
 
-  ClassicGrid(this.cellType) {
-    createGrid();
+  ClassicGrid(this.cellType, {int rows = 5, int columns = 5}) {
+    createGrid(rows: rows, columns: columns);
   }
 
   @override

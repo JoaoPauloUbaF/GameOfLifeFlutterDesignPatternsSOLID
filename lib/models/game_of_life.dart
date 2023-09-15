@@ -5,12 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_of_life_design_patterns_solid/controllers/dimension_stepper.dart';
 import 'package:game_of_life_design_patterns_solid/controllers/tick_controller.dart';
 import 'package:game_of_life_design_patterns_solid/models/cell.dart';
-import 'package:game_of_life_design_patterns_solid/models/easy_life_grid.dart';
 import 'package:game_of_life_design_patterns_solid/models/grid.dart';
 import 'package:game_of_life_design_patterns_solid/models/grid_strategy.dart';
-import 'package:game_of_life_design_patterns_solid/models/predator_prey_life_grid.dart';
-
-import 'classic_grid.dart';
 
 class GameOfLife extends Notifier<GameState> {
   // To-do: change the notifier to be a grid changed notifier
@@ -18,9 +14,7 @@ class GameOfLife extends Notifier<GameState> {
 
   late int generation = 0;
 
-  late Grid grid;
-
-  late GridStrategy gridStrategy;
+  late GridStrategy gridStrategy = GridStrategy();
 
   late Tick timer;
 
@@ -29,7 +23,7 @@ class GameOfLife extends Notifier<GameState> {
   }
 
   void startGame() {
-    if (!grid.anyAliveCells() || state == GameState.running) {
+    if (!gridStrategy.anyAliveCells() || state == GameState.running) {
       return;
     }
     state = GameState.running;
@@ -41,7 +35,8 @@ class GameOfLife extends Notifier<GameState> {
     generation = 0;
     ref.read(dimensionStepperProvider.notifier).reset();
     timer.cancelTimer();
-    grid = PredatorPreyLifeGrid(ref.read(cellTypeProvider));
+    gridStrategy.setGrid(
+        ref.watch(gridTypeProvider), ref.watch(cellTypeProvider));
     state = GameState.stopped;
     debugState();
   }
@@ -59,13 +54,13 @@ class GameOfLife extends Notifier<GameState> {
     if (state == GameState.running) {
       generation++;
       state = GameState.loading;
-      grid.nextGrid();
+      gridStrategy.nextGrid();
       state = GameState.running;
     }
   }
 
   void newGame(int rows, int columns) {
-    grid.createGrid(rows: rows, columns: columns);
+    gridStrategy.createGrid(rows: rows, columns: columns);
     state = GameState.loading;
     timer.cancelTimer();
     generation = 0;
@@ -76,7 +71,7 @@ class GameOfLife extends Notifier<GameState> {
   void randomGame() {
     state = GameState.loading;
     timer.cancelTimer();
-    grid.generateRadomGrid();
+    gridStrategy.generateRadomGrid();
     state = GameState.ready;
     debugState();
   }
@@ -87,7 +82,8 @@ class GameOfLife extends Notifier<GameState> {
 
   @override
   GameState build() {
-    grid = PredatorPreyLifeGrid(ref.watch(cellTypeProvider));
+    gridStrategy.setGrid(
+        ref.watch(gridTypeProvider), ref.watch(cellTypeProvider));
     timer = ref.watch(tickProvider.notifier);
     return GameState.stopped;
   }

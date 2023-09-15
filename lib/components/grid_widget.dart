@@ -29,13 +29,13 @@ class GridWidget extends ConsumerWidget {
           height: MediaQuery.of(context).size.width * 0.7,
           child: GridView.builder(
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: currentGame.grid.columns,
+              crossAxisCount: currentGame.gridStrategy.grid.columns,
             ),
             itemBuilder: (context, index) {
-              Cell cell = currentGame.grid.frame[index];
+              Cell cell = currentGame.gridStrategy.grid.frame[index];
               return CircleCell(cell: cell);
             },
-            itemCount: currentGame.grid.frame.length,
+            itemCount: currentGame.gridStrategy.grid.frame.length,
           ),
         ),
       ],

@@ -3,7 +3,9 @@ import 'cell_factory.dart';
 import 'classic_grid.dart';
 
 class PredatorPreyLifeGrid extends ClassicGrid {
-  PredatorPreyLifeGrid(super.cellType);
+  PredatorPreyLifeGrid(super.cellType, {int rows = 5, int columns = 5}) {
+    createGrid(rows: rows, columns: columns);
+  }
 
   @override
   void nextGrid() {
