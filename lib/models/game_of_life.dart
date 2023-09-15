@@ -7,6 +7,8 @@ import 'package:game_of_life_design_patterns_solid/controllers/tick_controller.d
 import 'package:game_of_life_design_patterns_solid/models/cell.dart';
 import 'package:game_of_life_design_patterns_solid/models/easy_life_grid.dart';
 import 'package:game_of_life_design_patterns_solid/models/grid.dart';
+import 'package:game_of_life_design_patterns_solid/models/grid_strategy.dart';
+import 'package:game_of_life_design_patterns_solid/models/predator_prey_life_grid.dart';
 
 import 'classic_grid.dart';
 
@@ -17,6 +19,8 @@ class GameOfLife extends Notifier<GameState> {
   late int generation = 0;
 
   late Grid grid;
+
+  late GridStrategy gridStrategy;
 
   late Tick timer;
 
@@ -37,7 +41,7 @@ class GameOfLife extends Notifier<GameState> {
     generation = 0;
     ref.read(dimensionStepperProvider.notifier).reset();
     timer.cancelTimer();
-    grid = ClassicGrid(ref.read(cellTypeProvider));
+    grid = PredatorPreyLifeGrid(ref.read(cellTypeProvider));
     state = GameState.stopped;
     debugState();
   }
@@ -83,7 +87,7 @@ class GameOfLife extends Notifier<GameState> {
 
   @override
   GameState build() {
-    grid = EasyLifeGrid(ref.read(cellTypeProvider));
+    grid = PredatorPreyLifeGrid(ref.watch(cellTypeProvider));
     timer = ref.watch(tickProvider.notifier);
     return GameState.stopped;
   }

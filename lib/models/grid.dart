@@ -1,3 +1,5 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'cell.dart';
 
 abstract class Grid {
@@ -19,3 +21,19 @@ abstract class Grid {
 
   void setDimension({required int size});
 }
+
+enum GridType { classic, predatorPrey, easyLife }
+
+class GridTypeNotifier extends Notifier<GridType> {
+  @override
+  GridType build() {
+    return GridType.classic;
+  }
+
+  void setGridType(GridType gridType) {
+    state = gridType;
+  }
+}
+
+final gridTypeProvider =
+    NotifierProvider<GridTypeNotifier, GridType>(GridTypeNotifier.new);

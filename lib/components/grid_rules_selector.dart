@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:game_of_life_design_patterns_solid/models/cell.dart';
-import 'package:game_of_life_design_patterns_solid/models/game_of_life.dart';
+import 'package:game_of_life_design_patterns_solid/models/grid.dart';
 
-class CellTypeSelector extends ConsumerWidget {
-  const CellTypeSelector({Key? key}) : super(key: key);
+class GridRulesSelector extends ConsumerWidget {
+  const GridRulesSelector({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    var gridTypeSelected = ref.watch(gridTypeProvider);
+    var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
-    var selectedCellType = ref.watch(cellTypeProvider);
     return Container(
       width: width / 4,
       height: 170,
@@ -21,18 +21,17 @@ class CellTypeSelector extends ConsumerWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const Text('Cell Type'),
+          const Text('Grid Rules'),
           SizedBox(
             width: width / 4.5,
-            child: DropdownButton<CellType>(
-              value: selectedCellType,
-              onChanged: (CellType? newValue) {
-                ref.read(cellTypeProvider.notifier).setCellType(newValue!);
-                //ref.read(gameOfLifeProvider.notifier).stopGame();
+            child: DropdownButton<GridType>(
+              value: gridTypeSelected,
+              onChanged: (GridType? newValue) {
+                ref.read(gridTypeProvider.notifier).setGridType(newValue!);
               },
-              items: CellType.values
-                  .map<DropdownMenuItem<CellType>>((CellType value) {
-                return DropdownMenuItem<CellType>(
+              items: GridType.values
+                  .map<DropdownMenuItem<GridType>>((GridType value) {
+                return DropdownMenuItem<GridType>(
                   value: value,
                   child: Text(value.toString().split('.').last),
                 );

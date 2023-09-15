@@ -42,6 +42,17 @@ class PredatorPreyLifeGrid extends ClassicGrid {
     frame = nextGrid;
   }
 
+  @override
+  void generateRadomGrid() {
+    for (var i = 0; i < rows * columns; i++) {
+      frame[i] = CellFactory.createCell(
+          genLife.nextInt(100) > 98 ? CellType.virus : CellType.bacteria,
+          i ~/ rows,
+          i % columns,
+          genLife.nextInt(2) == 1 ? CellState.alive : CellState.dead);
+    }
+  }
+
   int countPredatorNeighbors(int row, int column) {
     int count = 0;
     for (int i = -1; i <= 1; i++) {

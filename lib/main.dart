@@ -58,14 +58,17 @@ class _GameOfLifeAppState extends State<GameOfLifeApp> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Consumer(builder:
-                  (BuildContext context, WidgetRef ref, Widget? child) {
-                var _ = ref.watch(gameOfLifeProvider);
-                return Text(
-                    'Geração ${ref.watch(gameOfLifeProvider.notifier).generation}',
-                    style: const TextStyle(fontSize: 20));
-              }),
               const GameSettingsWidget(),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Consumer(builder:
+                    (BuildContext context, WidgetRef ref, Widget? child) {
+                  var _ = ref.watch(gameOfLifeProvider);
+                  return Text(
+                      'Generation ${ref.watch(gameOfLifeProvider.notifier).generation}',
+                      style: const TextStyle(fontSize: 20));
+                }),
+              ),
               GridWidget(),
               const PlayerWidget(),
             ],

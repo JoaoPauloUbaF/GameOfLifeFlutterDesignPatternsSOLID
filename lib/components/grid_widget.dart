@@ -20,7 +20,10 @@ class GridWidget extends ConsumerWidget {
     var timeStr = formatDuration(currentTime);
     return Column(
       children: [
-        Text('Tempo Decorrido: $timeStr'),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text('Tempo Decorrido: $timeStr'),
+        ),
         SizedBox(
           width: MediaQuery.of(context).size.width * 0.7,
           height: MediaQuery.of(context).size.width * 0.7,
