@@ -6,10 +6,12 @@ import 'package:game_of_life_design_patterns_solid/models/game_of_life.dart';
 class Tick extends Notifier<Duration> {
   late Timer _timer;
   late DateTime init;
+  Duration duration = const Duration(milliseconds: 1000);
 
   @override
   Duration build() {
-    _timer = Timer.periodic(const Duration(milliseconds: 1000), (timer) {
+    init = DateTime.now();
+    _timer = Timer.periodic(duration, (timer) {
       state = Duration.zero;
     });
     cancelTimer();
@@ -22,20 +24,23 @@ class Tick extends Notifier<Duration> {
   }
 
   void startTimer() {
-    if (_timer.isActive) {
-      return;
-    }
+    // if (_timer.isActive) {
+    //   return;
+    // }
     init = DateTime.now();
-    _timer = Timer.periodic(const Duration(milliseconds: 1000), (timer) {
+    _timer = Timer.periodic(duration, (timer) {
       ref.read(gameOfLifeProvider.notifier).nextGeneration();
       state = DateTime.now().difference(init);
     });
   }
 
-  void setTimer(int duration) {
-    _timer = Timer(Duration(seconds: duration), () {
-      state = DateTime.now().difference(init);
-    });
+  void resetTimer() {
+    cancelTimer();
+    startTimer();
+  }
+
+  void setDuration(int duration) {
+    this.duration = Duration(milliseconds: duration);
   }
 
   bool isActive() {

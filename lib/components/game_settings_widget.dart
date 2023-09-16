@@ -1,25 +1,49 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:game_of_life_design_patterns_solid/components/grid_rules_selector.dart';
+import 'package:game_of_life_design_patterns_solid/components/grid_rules_selector_widget.dart';
 import 'package:game_of_life_design_patterns_solid/controllers/dimension_stepper.dart';
+import 'package:game_of_life_design_patterns_solid/controllers/tick_controller.dart';
 
-import 'cell_type_selector.dart';
+import 'cell_type_selector_widget.dart';
 
 class GameSettingsWidget extends ConsumerWidget {
   const GameSettingsWidget({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return const Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    var _ = ref.watch(tickProvider);
+    // ignore: prefer_const_constructors
+    return Column(
       children: [
-        GridDimensionConfigCard(
-          title: 'Enter the dimension',
-          subtitle: '4 will create a 4x4 grids',
-          bottomText: '',
+        const Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            GridDimensionConfigCard(
+              title: 'Enter the dimension',
+              subtitle: '4 will create a 4x4 grids',
+              bottomText: '',
+            ),
+            CellTypeSelector(),
+            GridRulesSelector(),
+          ],
         ),
-        CellTypeSelector(),
-        GridRulesSelector(),
+        Slider(
+          value: ref
+              .watch(tickProvider.notifier)
+              .duration
+              .inMilliseconds
+              .toDouble(),
+          min: 100,
+          max: 2000,
+          divisions: 1000,
+          label: 'Timer',
+          onChangeEnd: (double value) {
+            ref.read(tickProvider.notifier).resetTimer();
+          },
+          onChanged: (double value) {
+            ref.read(tickProvider.notifier).setDuration(value.toInt());
+          },
+        ),
       ],
     );
   }
@@ -87,6 +111,7 @@ class GridDimensionConfigCard extends ConsumerWidget {
                     color: Colors.black,
                   ),
                   child: IconButton(
+                    hoverColor: Colors.transparent,
                     color: Colors.white,
                     icon: const Icon(Icons.add),
                     onPressed: () {

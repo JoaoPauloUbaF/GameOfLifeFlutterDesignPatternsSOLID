@@ -4,11 +4,11 @@ import 'package:game_of_life_design_patterns_solid/models/game_of_life.dart';
 class DimensionStepper extends Notifier<int> {
   @override
   int build() {
-    return 5;
+    return 10;
   }
 
   void increment() {
-    if (state >= 30) {
+    if (state >= 100) {
       return;
     }
     state++;
@@ -16,7 +16,7 @@ class DimensionStepper extends Notifier<int> {
   }
 
   void decrement() {
-    if (state <= 5) {
+    if (state <= 10) {
       return;
     }
     state--;
