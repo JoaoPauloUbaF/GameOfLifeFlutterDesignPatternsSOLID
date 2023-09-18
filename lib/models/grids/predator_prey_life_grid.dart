@@ -3,7 +3,7 @@ import '../cells/cell_factory.dart';
 import 'classic_grid.dart';
 
 class PredatorPreyLifeGrid extends ClassicGrid {
-  PredatorPreyLifeGrid(super.cellType, {int rows = 5, int columns = 5}) {
+  PredatorPreyLifeGrid(super.cellType, {int rows = 10, int columns = 10}) {
     createGrid(rows: rows, columns: columns);
   }
 
@@ -29,15 +29,15 @@ class PredatorPreyLifeGrid extends ClassicGrid {
               CellType.virus, row, column, CellState.alive);
         }
       } else {
-        if (predatorNeighbors == 3) {
+        if (predatorNeighbors == 2 || predatorNeighbors == 3) {
           nextGrid[i] = CellFactory.createCell(
               CellType.virus, row, column, CellState.alive);
-        } else if (aliveNeighbors == 2 || aliveNeighbors == 3) {
+        } else if (aliveNeighbors == 2) {
           nextGrid[i] = CellFactory.createCell(
               CellType.bacteria, row, column, CellState.alive);
-        } else if (aliveNeighbors > 3) {
+        } else if (aliveNeighbors == 3) {
           nextGrid[i] = CellFactory.createCell(
-              CellType.bacteria, row, column, CellState.dead);
+              CellType.bacteria, row, column, CellState.alive);
         }
       }
     }
@@ -48,7 +48,7 @@ class PredatorPreyLifeGrid extends ClassicGrid {
   void generateRadomGrid() {
     for (var i = 0; i < rows * columns; i++) {
       frame[i] = CellFactory.createCell(
-          genLife.nextInt(100) > 98 ? CellType.virus : CellType.bacteria,
+          genLife.nextInt(100) > 95 ? CellType.virus : CellType.bacteria,
           i ~/ rows,
           i % columns,
           genLife.nextInt(2) == 1 ? CellState.alive : CellState.dead);
