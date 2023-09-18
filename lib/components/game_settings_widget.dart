@@ -5,6 +5,7 @@ import 'package:game_of_life_design_patterns_solid/controllers/dimension_stepper
 import 'package:game_of_life_design_patterns_solid/controllers/tick_controller.dart';
 
 import 'cell_type_selector_widget.dart';
+import 'grid_dimension_config_card_widget.dart';
 
 class GameSettingsWidget extends ConsumerWidget {
   const GameSettingsWidget({super.key});
@@ -13,117 +14,42 @@ class GameSettingsWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     var _ = ref.watch(tickProvider);
     // ignore: prefer_const_constructors
-    return Column(
-      children: [
-        const Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            GridDimensionConfigCard(
-              title: 'Enter the dimension',
-              subtitle: '4 will create a 4x4 grids',
-              bottomText: '',
-            ),
-            CellTypeSelector(),
-            GridRulesSelector(),
-          ],
-        ),
-        Slider(
-          value: ref
-              .watch(tickProvider.notifier)
-              .duration
-              .inMilliseconds
-              .toDouble(),
-          min: 100,
-          max: 2000,
-          divisions: 1000,
-          label: 'Timer',
-          onChangeEnd: (double value) {
-            ref.read(tickProvider.notifier).resetTimer();
-          },
-          onChanged: (double value) {
-            ref.read(tickProvider.notifier).setDuration(value.toInt());
-          },
-        ),
-      ],
-    );
-  }
-}
-
-class GridDimensionConfigCard extends ConsumerWidget {
-  const GridDimensionConfigCard({
-    super.key,
-    required this.title,
-    required this.subtitle,
-    required this.bottomText,
-  });
-
-  final String title;
-  final String subtitle;
-  final String bottomText;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    var width = MediaQuery.of(context).size.width;
-    int dimensionValue = ref.watch(dimensionStepperProvider);
-    var dimension = ref.read(dimensionStepperProvider.notifier);
-    return Container(
-      height: 170,
-      width: width / 4,
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.black),
-        borderRadius: BorderRadius.circular(10),
-      ),
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Text(title),
-          Text(subtitle),
-          Container(
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.black),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              // mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                  decoration: const BoxDecoration(
-                    color: Colors.black,
-                  ),
-                  child: IconButton(
-                    hoverColor: Colors.transparent,
-                    color: Colors.white,
-                    icon: const Icon(Icons.remove),
-                    onPressed: () {
-                      dimension.decrement();
-                    },
-                  ),
+          const Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 4.0),
+                  child: GridDimensionConfigCard(),
                 ),
-                Container(
-                  width: 40,
-                  height: 40,
-                  color: Colors.grey[300],
-                  child: Center(child: Text(' $dimensionValue ')),
-                ),
-                Container(
-                  decoration: const BoxDecoration(
-                    color: Colors.black,
-                  ),
-                  child: IconButton(
-                    hoverColor: Colors.transparent,
-                    color: Colors.white,
-                    icon: const Icon(Icons.add),
-                    onPressed: () {
-                      dimension.increment();
-                    },
-                  ),
-                ),
-              ],
-            ),
+              ),
+              Expanded(child: CellTypeSelector()),
+              Expanded(child: GridRulesSelector()),
+            ],
           ),
-          Text('Grid: $dimensionValue x $dimensionValue = '
-              '${dimensionValue * dimensionValue} Cells!'),
+          Slider.adaptive(
+            activeColor: Colors.black,
+            inactiveColor: Colors.grey,
+            value: ref
+                .watch(tickProvider.notifier)
+                .duration
+                .inMilliseconds
+                .toDouble(),
+            min: 100,
+            max: 2000,
+            divisions: 1000,
+            label: 'Tick Rate',
+            onChangeEnd: (double value) {
+              ref.read(tickProvider.notifier).resetTimer();
+            },
+            onChanged: (double value) {
+              ref.read(tickProvider.notifier).setDuration(value.toInt());
+            },
+          ),
         ],
       ),
     );

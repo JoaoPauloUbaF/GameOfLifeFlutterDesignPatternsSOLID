@@ -7,27 +7,24 @@ class CellTypeSelector extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var width = MediaQuery.of(context).size.width;
     var selectedCellType = ref.watch(cellTypeProvider);
-    return Container(
-      width: width / 4,
-      height: 170,
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.black),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const Text('Cell Type'),
-          SizedBox(
-            width: width / 4.5,
-            child: DropdownButton<CellType>(
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+      child: Container(
+        height: 90,
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.black),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Text('Cell Type'),
+            DropdownButton<CellType>(
               value: selectedCellType,
               onChanged: (CellType? newValue) {
                 ref.read(cellTypeProvider.notifier).setCellType(newValue!);
-                //ref.read(gameOfLifeProvider.notifier).stopGame();
               },
               items: CellType.values
                   .map<DropdownMenuItem<CellType>>((CellType value) {
@@ -37,8 +34,8 @@ class CellTypeSelector extends ConsumerWidget {
                 );
               }).toList(),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

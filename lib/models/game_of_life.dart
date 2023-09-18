@@ -69,6 +69,7 @@ class GameOfLife extends Notifier<GameState> {
   void randomGame() {
     state = GameState.loading;
     timer.cancelTimer();
+    generation = 0;
     gridStrategy.generateRadomGrid();
     state = GameState.ready;
     debugState();

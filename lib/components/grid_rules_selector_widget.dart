@@ -8,22 +8,20 @@ class GridRulesSelector extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var gridTypeSelected = ref.watch(gridTypeProvider);
-    var width = MediaQuery.of(context).size.width;
-    return Container(
-      width: width / 4,
-      height: 170,
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.black),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const Text('Grid Rules'),
-          SizedBox(
-            width: width / 4.5,
-            child: DropdownButton<GridType>(
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: .0),
+      child: Container(
+        height: 90,
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.black),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Text('Grid Rules'),
+            DropdownButton<GridType>(
               value: gridTypeSelected,
               onChanged: (GridType? newValue) {
                 ref.read(gridTypeProvider.notifier).setGridType(newValue!);
@@ -36,8 +34,8 @@ class GridRulesSelector extends ConsumerWidget {
                 );
               }).toList(),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

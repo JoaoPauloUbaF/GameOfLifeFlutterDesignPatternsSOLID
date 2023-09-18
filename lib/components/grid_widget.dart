@@ -13,18 +13,12 @@ class GridWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var _ = ref.watch(gameOfLifeProvider);
-    final currentTime = ref.read(tickProvider);
     var currentGame = ref.read(gameOfLifeProvider.notifier);
-    var timeStr = formatDuration(currentTime);
     return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(timeStr),
-        ),
         SizedBox(
-          width: MediaQuery.of(context).size.width * 0.7,
-          height: MediaQuery.of(context).size.width * 0.7,
+          width: MediaQuery.of(context).size.width * 0.93,
+          height: MediaQuery.of(context).size.width * 0.93,
           child: GridView.builder(
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: currentGame.gridStrategy.grid.columns,

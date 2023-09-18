@@ -3,7 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_of_life_design_patterns_solid/components/player_widget.dart';
+import 'package:game_of_life_design_patterns_solid/controllers/tick_controller.dart';
 import 'package:game_of_life_design_patterns_solid/models/game_of_life.dart';
+import 'package:game_of_life_design_patterns_solid/utils/time_utils.dart';
 
 import 'components/game_settings_widget.dart';
 import 'components/grid_widget.dart';
@@ -59,13 +61,21 @@ class _GameOfLifeAppState extends State<GameOfLifeApp> {
             children: [
               const GameSettingsWidget(),
               Padding(
-                padding: const EdgeInsets.all(10.0),
+                padding: const EdgeInsets.only(bottom: 4.0),
                 child: Consumer(builder:
                     (BuildContext context, WidgetRef ref, Widget? child) {
+                  final currentTime = ref.read(tickProvider);
+                  var timeStr = formatDuration(currentTime);
                   var _ = ref.watch(gameOfLifeProvider);
-                  return Text(
-                      'Generation ${ref.watch(gameOfLifeProvider.notifier).generation}',
-                      style: const TextStyle(fontSize: 20));
+                  return Row(
+                    children: [
+                      Text(
+                          'Generation ${ref.watch(gameOfLifeProvider.notifier).generation}',
+                          style: const TextStyle(fontSize: 20)),
+                      const Spacer(),
+                      Text(timeStr),
+                    ],
+                  );
                 }),
               ),
               GridWidget(),

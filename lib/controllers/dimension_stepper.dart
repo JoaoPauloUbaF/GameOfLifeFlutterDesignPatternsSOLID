@@ -24,7 +24,7 @@ class DimensionStepper extends Notifier<int> {
   }
 
   void reset() {
-    state = 5;
+    state = 10;
     ref.read(gameOfLifeProvider.notifier).newGame(state, state);
   }
 }
