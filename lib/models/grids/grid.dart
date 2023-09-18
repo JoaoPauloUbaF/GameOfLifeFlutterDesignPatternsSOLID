@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'cell.dart';
+import '../cells/cell.dart';
 
 abstract class Grid {
   late int rows;

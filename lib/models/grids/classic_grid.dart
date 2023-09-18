@@ -1,8 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:game_of_life_design_patterns_solid/models/cell.dart';
-import 'package:game_of_life_design_patterns_solid/models/cell_factory.dart';
+import 'package:game_of_life_design_patterns_solid/models/cells/cell.dart';
+import 'package:game_of_life_design_patterns_solid/models/cells/cell_factory.dart';
 
 import 'grid.dart';
 

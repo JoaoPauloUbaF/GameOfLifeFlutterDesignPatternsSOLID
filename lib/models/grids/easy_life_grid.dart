@@ -1,5 +1,5 @@
-import 'cell.dart';
-import 'cell_factory.dart';
+import '../cells/cell.dart';
+import '../cells/cell_factory.dart';
 import 'classic_grid.dart';
 
 class EasyLifeGrid extends ClassicGrid {

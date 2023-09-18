@@ -1,5 +1,5 @@
-import 'cell.dart';
-import 'cell_factory.dart';
+import '../cells/cell.dart';
+import '../cells/cell_factory.dart';
 import 'classic_grid.dart';
 
 class PredatorPreyLifeGrid extends ClassicGrid {
@@ -21,21 +21,21 @@ class PredatorPreyLifeGrid extends ClassicGrid {
       int predatorNeighbors = countPredatorNeighbors(row, column);
 
       if (findCell(row, column).cellType == CellType.virus) {
-        if (aliveNeighbors == 0 || predatorNeighbors > 3) {
+        if (aliveNeighbors == 0 || predatorNeighbors > 2) {
           nextGrid[i] = CellFactory.createCell(
               CellType.bacteria, row, column, CellState.dead);
-        } else if (aliveNeighbors > 0) {
+        } else if (aliveNeighbors == 1 || aliveNeighbors == 2) {
           nextGrid[i] = CellFactory.createCell(
               CellType.virus, row, column, CellState.alive);
         }
       } else {
-        if (predatorNeighbors > 0) {
+        if (predatorNeighbors == 3) {
           nextGrid[i] = CellFactory.createCell(
               CellType.virus, row, column, CellState.alive);
-        } else if (aliveNeighbors == 3) {
+        } else if (aliveNeighbors == 2 || aliveNeighbors == 3) {
           nextGrid[i] = CellFactory.createCell(
               CellType.bacteria, row, column, CellState.alive);
-        } else if (aliveNeighbors > 4) {
+        } else if (aliveNeighbors > 3) {
           nextGrid[i] = CellFactory.createCell(
               CellType.bacteria, row, column, CellState.dead);
         }

@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:game_of_life_design_patterns_solid/models/cell.dart';
+import 'package:game_of_life_design_patterns_solid/models/grids/grid.dart';
 
-class CellTypeSelector extends ConsumerWidget {
-  const CellTypeSelector({Key? key}) : super(key: key);
+class GridRulesSelector extends ConsumerWidget {
+  const GridRulesSelector({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var selectedCellType = ref.watch(cellTypeProvider);
+    var gridTypeSelected = ref.watch(gridTypeProvider);
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+      padding: const EdgeInsets.symmetric(horizontal: .0),
       child: Container(
         height: 90,
         decoration: BoxDecoration(
@@ -20,15 +20,15 @@ class CellTypeSelector extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Text('Cell Type'),
-            DropdownButton<CellType>(
-              value: selectedCellType,
-              onChanged: (CellType? newValue) {
-                ref.read(cellTypeProvider.notifier).setCellType(newValue!);
+            const Text('Grid Rules'),
+            DropdownButton<GridType>(
+              value: gridTypeSelected,
+              onChanged: (GridType? newValue) {
+                ref.read(gridTypeProvider.notifier).setGridType(newValue!);
               },
-              items: CellType.values
-                  .map<DropdownMenuItem<CellType>>((CellType value) {
-                return DropdownMenuItem<CellType>(
+              items: GridType.values
+                  .map<DropdownMenuItem<GridType>>((GridType value) {
+                return DropdownMenuItem<GridType>(
                   value: value,
                   child: Text(value.toString().split('.').last),
                 );

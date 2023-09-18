@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:game_of_life_design_patterns_solid/components/grid_rules_selector_widget.dart';
+import 'package:game_of_life_design_patterns_solid/components/settings/grid_rules_selector_widget.dart';
 import 'package:game_of_life_design_patterns_solid/controllers/dimension_stepper.dart';
 import 'package:game_of_life_design_patterns_solid/controllers/tick_controller.dart';
 
@@ -42,7 +42,7 @@ class GameSettingsWidget extends ConsumerWidget {
             min: 100,
             max: 2000,
             divisions: 1000,
-            label: 'Tick Rate',
+            label: 'Tick Interval',
             onChangeEnd: (double value) {
               ref.read(tickProvider.notifier).resetTimer();
             },

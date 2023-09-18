@@ -2,13 +2,13 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:game_of_life_design_patterns_solid/components/player_widget.dart';
+import 'package:game_of_life_design_patterns_solid/components/players/player_widget.dart';
 import 'package:game_of_life_design_patterns_solid/controllers/tick_controller.dart';
 import 'package:game_of_life_design_patterns_solid/models/game_of_life.dart';
 import 'package:game_of_life_design_patterns_solid/utils/time_utils.dart';
 
-import 'components/game_settings_widget.dart';
-import 'components/grid_widget.dart';
+import 'components/settings/game_settings_widget.dart';
+import 'components/grids/grid_widget.dart';
 
 void main() {
   //add this

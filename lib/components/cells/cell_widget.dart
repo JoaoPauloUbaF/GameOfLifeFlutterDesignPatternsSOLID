@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../models/cell.dart';
+import '../../models/cells/cell.dart';
 
 abstract class CellWidget extends StatelessWidget {
   final Cell cell;

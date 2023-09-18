@@ -1,5 +1,5 @@
-import 'package:game_of_life_design_patterns_solid/models/cell.dart';
-import 'package:game_of_life_design_patterns_solid/models/classic_grid.dart';
+import 'package:game_of_life_design_patterns_solid/models/cells/cell.dart';
+import 'package:game_of_life_design_patterns_solid/models/grids/classic_grid.dart';
 
 import 'easy_life_grid.dart';
 import 'grid.dart';
