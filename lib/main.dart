@@ -28,76 +28,79 @@ class GameOfLifeApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final showOnboarding = ref.watch(onboardingProvider);
     final onboardingPagesList = OnboardingState().pages;
-
-    if (showOnboarding) {
-      return DefaultOnboarding(onboardingPagesList: onboardingPagesList);
-    }
-
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: Center(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Spacer(),
-              SizedBox(
-                width: 250,
-                height: 150,
-                child:
-                    Image.asset('assets/images/app_logo.png', fit: BoxFit.fill),
-              ),
-              const Spacer(),
-              IconButton(
-                  iconSize: 28,
-                  tooltip: "Onboarding",
-                  hoverColor: Colors.transparent,
-                  color: Colors.blue[900],
-                  onPressed: () =>
-                      ref.read(onboardingProvider.notifier).toggle(),
-                  icon: const Icon(Icons.help)),
-            ],
-          ),
-        ),
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const GameSettingsWidget(),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 4.0),
-                child: Consumer(builder:
-                    (BuildContext context, WidgetRef ref, Widget? child) {
-                  final currentTime = ref.read(tickProvider);
-                  var timeStr = formatDuration(currentTime);
-                  var _ = ref.watch(gameOfLifeProvider);
-                  return Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 24.0),
-                        child: Text(
-                            'Generation ${ref.watch(gameOfLifeProvider.notifier).generation}',
-                            style: const TextStyle(fontSize: 20)),
+    return AnimatedSwitcher(
+        switchInCurve: Curves.easeIn,
+        switchOutCurve: Curves.easeOut,
+        duration: const Duration(
+            milliseconds: 500), // Defina a duração da animação aqui
+        child: showOnboarding
+            ? DefaultOnboarding(
+                key: const ValueKey(
+                    'onboarding'), // Chave para identificar o widget
+                onboardingPagesList: onboardingPagesList)
+            : Scaffold(
+                key: const ValueKey('game'), // Chave para identificar o widget
+                appBar: AppBar(
+                  backgroundColor: Colors.white,
+                  title: Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Spacer(),
+                        SizedBox(
+                          width: 250,
+                          height: 150,
+                          child: Image.asset('assets/images/app_logo.png',
+                              fit: BoxFit.fill),
+                        ),
+                        const Spacer(),
+                        IconButton(
+                            iconSize: 28,
+                            tooltip: "Onboarding",
+                            hoverColor: Colors.transparent,
+                            color: Colors.blue[900],
+                            onPressed: () =>
+                                ref.read(onboardingProvider.notifier).toggle(),
+                            icon: const Icon(Icons.help)),
+                      ],
+                    ),
+                  ),
+                ),
+                body: SingleChildScrollView(
+                  child: Container(
+                    color: Colors.grey[200],
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const GameSettingsWidget(),
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 4.0),
+                            child: Consumer(builder: (BuildContext context,
+                                WidgetRef ref, Widget? child) {
+                              final currentTime = ref.read(tickProvider);
+                              var timeStr = formatDuration(currentTime);
+                              var _ = ref.watch(gameOfLifeProvider);
+                              return Row(
+                                children: [
+                                  Text(
+                                      'Generation ${ref.watch(gameOfLifeProvider.notifier).generation}',
+                                      style: const TextStyle(fontSize: 20)),
+                                  const Spacer(),
+                                  const PlayerWidget(),
+                                  const Spacer(),
+                                  Text(timeStr),
+                                ],
+                              );
+                            }),
+                          ),
+                          GridWidget(),
+                        ],
                       ),
-                      const Spacer(),
-                      const PlayerWidget(),
-                      const Spacer(),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 24.0),
-                        child: Text(timeStr),
-                      ),
-                    ],
-                  );
-                }),
-              ),
-              GridWidget(),
-            ],
-          ),
-        ),
-      ),
-    );
+                    ),
+                  ),
+                ),
+              ));
   }
 }

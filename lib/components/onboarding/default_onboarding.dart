@@ -50,7 +50,7 @@ class _DefaultOnboardingState extends State<DefaultOnboarding> {
   Material _finishButton({void Function(int)? setIndex}) {
     return Material(
       borderRadius: defaultSkipButtonBorderRadius,
-      color: defaultProceedButtonColor,
+      color: Colors.blue[900],
       child: Consumer(
         builder: (_, WidgetRef ref, __) {
           return InkWell(
@@ -100,16 +100,16 @@ class _DefaultOnboardingState extends State<DefaultOnboarding> {
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height * 0.1,
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Spacer(),
+                      const SizedBox(width: 50),
                       CustomIndicator(
                         netDragPercent: dragDistance,
                         pagesLength: pagesLength,
                         indicator: Indicator(
                           indicatorDesign: IndicatorDesign.line(
                             lineDesign: LineDesign(
-                              lineType: DesignType.line_nonuniform,
+                              lineType: DesignType.line_uniform,
                             ),
                           ),
                         ),
