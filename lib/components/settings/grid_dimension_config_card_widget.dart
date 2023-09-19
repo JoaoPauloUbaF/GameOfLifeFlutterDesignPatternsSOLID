@@ -67,7 +67,6 @@ class GridDimensionConfigCard extends ConsumerWidget {
                     ),
                     Container(
                       width: 30, // Ajuste a largura conforme necessário
-                      color: Colors.grey[300],
                       child: Center(child: Text('$dimensionValue')),
                     ),
                     Container(

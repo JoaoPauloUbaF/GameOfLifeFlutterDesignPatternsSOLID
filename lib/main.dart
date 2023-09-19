@@ -1,17 +1,16 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_of_life_design_patterns_solid/components/players/player_widget.dart';
 import 'package:game_of_life_design_patterns_solid/controllers/tick_controller.dart';
 import 'package:game_of_life_design_patterns_solid/models/game_of_life.dart';
+import 'package:game_of_life_design_patterns_solid/models/onboarding/onboarding_state.dart';
 import 'package:game_of_life_design_patterns_solid/utils/time_utils.dart';
 
+import 'components/onboarding/default_onboarding.dart';
 import 'components/settings/game_settings_widget.dart';
 import 'components/grids/grid_widget.dart';
 
 void main() {
-  //add this
   runApp(
     const ProviderScope(
       child: MaterialApp(
@@ -22,37 +21,45 @@ void main() {
   );
 }
 
-class GameOfLifeApp extends StatefulWidget {
+class GameOfLifeApp extends ConsumerWidget {
   const GameOfLifeApp({Key? key}) : super(key: key);
 
   @override
-  // ignore: library_private_types_in_public_api
-  _GameOfLifeAppState createState() => _GameOfLifeAppState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final showOnboarding = ref.watch(onboardingProvider);
+    final onboardingPagesList = OnboardingState().pages;
 
-class _GameOfLifeAppState extends State<GameOfLifeApp> {
-  Timer? timer;
+    if (showOnboarding) {
+      return DefaultOnboarding(onboardingPagesList: onboardingPagesList);
+    }
 
-  GameOfLife gameOfLife = GameOfLife.instance;
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: Colors.grey[900],
-          title: const Center(
-            child: Text(
-              'Game of Life with Design Patterns',
-              style: TextStyle(
-                color: Colors.white,
+        backgroundColor: Colors.white,
+        title: Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Spacer(),
+              SizedBox(
+                width: 250,
+                height: 150,
+                child:
+                    Image.asset('assets/images/app_logo.png', fit: BoxFit.fill),
               ),
-            ),
-          )),
+              const Spacer(),
+              IconButton(
+                  iconSize: 28,
+                  tooltip: "Onboarding",
+                  hoverColor: Colors.transparent,
+                  color: Colors.blue[900],
+                  onPressed: () =>
+                      ref.read(onboardingProvider.notifier).toggle(),
+                  icon: const Icon(Icons.help)),
+            ],
+          ),
+        ),
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -69,17 +76,24 @@ class _GameOfLifeAppState extends State<GameOfLifeApp> {
                   var _ = ref.watch(gameOfLifeProvider);
                   return Row(
                     children: [
-                      Text(
-                          'Generation ${ref.watch(gameOfLifeProvider.notifier).generation}',
-                          style: const TextStyle(fontSize: 20)),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 24.0),
+                        child: Text(
+                            'Generation ${ref.watch(gameOfLifeProvider.notifier).generation}',
+                            style: const TextStyle(fontSize: 20)),
+                      ),
                       const Spacer(),
-                      Text(timeStr),
+                      const PlayerWidget(),
+                      const Spacer(),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 24.0),
+                        child: Text(timeStr),
+                      ),
                     ],
                   );
                 }),
               ),
               GridWidget(),
-              const PlayerWidget(),
             ],
           ),
         ),

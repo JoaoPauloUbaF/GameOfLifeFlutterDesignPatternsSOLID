@@ -42,7 +42,8 @@ class GameSettingsWidget extends ConsumerWidget {
             min: 100,
             max: 2000,
             divisions: 1000,
-            label: 'Tick Interval',
+            label:
+                'Tick Interval: ${ref.watch(tickProvider.notifier).duration.inMilliseconds} ms',
             onChangeEnd: (double value) {
               ref.read(tickProvider.notifier).resetTimer();
             },

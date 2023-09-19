@@ -25,8 +25,7 @@ class GridWidget extends ConsumerWidget {
             ),
             itemBuilder: (context, index) {
               Cell cell = currentGame.gridStrategy.grid.frame[index];
-              return CellWidgetFactory()
-                  .createCellWidget(ref.watch(cellTypeProvider), cell);
+              return CellWidgetFactory().createCellWidget(cell.cellType!, cell);
             },
             itemCount: currentGame.gridStrategy.grid.frame.length,
           ),

@@ -8,7 +8,7 @@ class DimensionStepper extends Notifier<int> {
   }
 
   void increment() {
-    if (state >= 100) {
+    if (state >= 40) {
       return;
     }
     state++;

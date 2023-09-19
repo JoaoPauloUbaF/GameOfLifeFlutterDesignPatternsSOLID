@@ -10,7 +10,8 @@ class GridStrategy {
 
   void setGrid(GridType gridType, CellType cellType,
       {int rows = 10, int columns = 10}) {
-    grid = GridFactory.createGrid(gridType, cellType);
+    grid = GridFactory.createGrid(gridType, cellType,
+        rows: rows, columns: columns);
   }
 
   void nextGrid() {
